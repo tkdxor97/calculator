@@ -30,15 +30,6 @@ int main(void)
 		while(a[i]!='\n')
 		{
 			scanf("%s %c",c[i],a[i]);
-			if(strcmp(c[i],"clear")==0)
-				system("reset");
-			else if(strcmp(c[i], "save")==0)
-				
-			else if(strcmp(c[i], "load")==0)
-
-			else if(strcmp(c[i], "end")==0)
-				
-			else
 			{
 				++i;
 
