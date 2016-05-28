@@ -17,6 +17,10 @@ char division(char a[60], char b[60])
 {
 
 }
+char mod(char a[60], char b[60])
+{
+
+}
 int main(void)
 {
 	int k=0, l=0, i, j, var_number=0;
