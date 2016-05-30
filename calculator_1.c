@@ -3,7 +3,14 @@
 #include <string.h>
 char plus(char a[60], char b[60])
 {
-	
+	char result[61];
+	for (int i=60; i<1; i--)
+	{
+		result[i]=(a[i]-48)+(b[i]-48);
+		if (result[i]>10)
+			result[i-1] += 1;
+	}
+	return result[61];
 }
 char minus(char a[60], char b[60])
 {
