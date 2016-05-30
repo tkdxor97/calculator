@@ -39,10 +39,28 @@ char mod(char a[60], char b[60])
 {
 
 }
+void clear()
+{
+	system("clear");
+}
+void Exit()
+{
+	exit(1);
+}
+int load(char name[10], char var[10][61])
+{
+	int var_number=0;
+	//여기 채워넣어라
+	return var_number;
+}
+void save(char name[10], char var[10][61], int var_number)
+{
+	//여기 채워넣어라
+}
 int main(void)
 {
 	int k=0, l=0, i, j, var_number=0;
-	char aa[10000],c[100][61],a[100],s[100],var[10][61],var_name[10][2];
+	char aa[10000],c[100][61],a[100],s[100],var[10][61],var_name[10];
 	while(1)
 	{
 		
