@@ -1,10 +1,16 @@
-# calculator
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 char plus(char a[60], char b[60])
 {
-	
+	char result[61];
+	for (int i=60; i<1; i--)
+	{
+		result[i]=(a[i]-48)+(b[i]-48);
+		if (result[i]>10)
+			result[i-1] += 1;
+	}
+	return result[61];
 }
 char minus(char a[60], char b[60])
 {
@@ -18,33 +24,51 @@ char division(char a[60], char b[60])
 {
 
 }
+char mod(char a[60], char b[60])
+{
+
+}
 int main(void)
 {
-  FILE *ifp, *ofp;
-  ifp=fopen("output.txt","r");
-  ofp=fopen("output.txt","r");
-	int i=0;
-	char c[100][61],a[100],s[100],var[10][61],var_name[10][2];
+	int k=0, l=0, i, j, var_number=0;
+	char aa[10000],c[100][61],a[100],s[100],var[10][61],var_name[10][2];
 	while(1)
 	{
-		while(a[i]!='\n')
+		
+		//숫자와 연산자 읽어들이기
+	
+		gets(aa);
+		for(i=0;i<strlen(aa);++i)
 		{
-			scanf("%s %c",c[i],a[i]);
-			if(strcmp(c[i],"clear")==0)
-				system("reset");
-			else if(strcmp(c[i], "save")==0)
-				
-			else if(strcmp(c[i], "load")==0)
-
-			else if(strcmp(c[i], "end")==0)
-				
-			else
+			if(aa[i]=='+' || aa[i]=='-' || aa[i]=='*' || aa[i]=='/' || aa[i] == '%')
 			{
-				++i;
-
+				if(k==0)
+				{
+					for(j=0;j<i-1;++j)
+					{
+						c[k][j]=aa[j];
+					}
+					l=i;
+					a[k]=aa[i];
+					++k;
+				}
+				else
+				{
+					for(j=l+2;j<i-1;++j)
+					{
+						c[k][j-l-2]=aa[j];
+					}
+					l=i;
+					a[k]=aa[i];
+					++k;
+				}
 			}
 		}
+		for(i=l+2;i<strlen(aa);++i)
+		{
+			c[k][i-l-2]=aa[i];
+		}
+		++k;
 
-	}	
-	return 0;
+	}
 }
