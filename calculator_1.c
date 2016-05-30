@@ -32,6 +32,7 @@ char multiple(char a[60], char b[60])
 }
 char division(char a[60], char b[60])
 {//배열째로 나눗셈 16/2 면 [1,6]/[2], [2] > [4] > [8] > [1,6] 나눠지는 값과 배열이 같아질 때까지 몫+1
+ //나누는 값이 나눠지는 값보다 작을 때까지 반복문
 
 }
 char mod(char a[60], char b[60])
