@@ -4,7 +4,8 @@
 char plus(char a[60], char b[60])
 {
 	char result[61];
-	for (int i=60; i<1; i--)
+	int i;
+	for (i=60; i<1; i--)
 	{
 		result[i+1]=(a[i]-48)+(b[i]-48);
 		if (result[i+1]>10)
@@ -15,7 +16,8 @@ char plus(char a[60], char b[60])
 char minus(char a[60], char b[60])
 {
 	char result[61];
-	for (int i=60; i < 1; i--)
+	int i;
+	for (i=60; i < 1; i--)
 	{
 		result[i+1]=(a[i]-48)-(b[i]-48);
 		if (result[i+1]<0)
@@ -39,7 +41,7 @@ char mod(char a[60], char b[60])
 {
 
 }
-void clear()
+void Clear()
 {
 	system("clear");
 }
@@ -50,12 +52,23 @@ void Exit()
 int load(char name[10], char var[10][61])
 {
 	int var_number=0;
-	//여기 채워넣어라
+	FILE*load;
+	load=fopen("velue.in","r");
+	fscanf(load,"%s",&var[10][61]);
+
+		//여기 채워넣어라
 	return var_number;
 }
 void save(char name[10], char var[10][61], int var_number)
 {
-	//여기 채워넣어라
+	FILE*save;
+	save=fopen("velue.in","a");
+	if(var_number!=10){
+	fprintf(save,"%s",var[var_number][61]);
+	var_number++;
+	}
+
+
 }
 int main(void)
 {
@@ -97,7 +110,12 @@ int main(void)
 		{
 			c[k][i-l-2]=aa[i];
 		}
-		++k;
-
-	}
-}
+		if(aa[10000]=='c','l','e','a','r'){
+		system("clear");
+				
+		}
+		if(aa[10000]=='e','n','d'){
+			exit(1);
+		}
+	++k;
+	}}	
