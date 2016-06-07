@@ -4,7 +4,8 @@
 char plus(char a[60], char b[60])
 {
 	char result[61];
-	for (int i=60; i<1; i--)
+	int i;
+	for (i=60; i<1; i--)
 	{
 		result[i+1]=(a[i]-48)+(b[i]-48);
 		if (result[i+1]>10)
@@ -15,7 +16,8 @@ char plus(char a[60], char b[60])
 char minus(char a[60], char b[60])
 {
 	char result[61];
-	for (int i=60; i < 1; i--)
+	int i;
+	for (i=60; i < 1; i--)
 	{
 		result[i+1]=(a[i]-48)-(b[i]-48);
 		if (result[i+1]<0)
@@ -31,14 +33,15 @@ char multiple(char a[60], char b[60])
 
 }
 char division(char a[60], char b[60])
-{
+{//배열째로 나눗셈 16/2 면 [1,6]/[2], [2] > [4] > [8] > [1,6] 나눠지는 값과 배열이 같아질 때까지 몫+1
+ //나누는 값이 나눠지는 값보다 작을 때까지 반복문
 
 }
 char mod(char a[60], char b[60])
 {
 
 }
-void clear()
+void Clear()
 {
 	system("clear");
 }
@@ -46,15 +49,29 @@ void Exit()
 {
 	exit(1);
 }
-int load(char name[10], char var[10][61])
+void save(char var_name[10], char var[10][62], int var_number)
+{
+	FILE *ofp;
+	ofp=fopen("data.txt","w");
+	for(int i=0; i<var_number; ++i)
+		fprintf(ofp,"%c %s ",var_name[i], var[i]);
+	fclose(ofp);
+}
+int load(char var_name[10], char var[10][62])
 {
 	int var_number=0;
-	//여기 채워넣어라
+	int c;
+	FILE *ifp;
+	ifp=fopen("data.txt","r");
+	while(c!=EOF)
+	{
+		fscanf(ifp,"%c %s",&var_name[var_number], &var[var_number]);
+		c=getc(ifp);
+		++var_number;
+	}
+	fclose(ifp);
+	--var_number;
 	return var_number;
-}
-void save(char name[10], char var[10][61], int var_number)
-{
-	//여기 채워넣어라
 }
 int main(void)
 {
@@ -96,7 +113,12 @@ int main(void)
 		{
 			c[k][i-l-2]=aa[i];
 		}
-		++k;
-
-	}
-}
+		if(aa[10000]=='c','l','e','a','r'){
+		system("clear");
+				
+		}
+		if(aa[10000]=='e','n','d'){
+			exit(1);
+		}
+	++k;
+	}}	
