@@ -1,6 +1,57 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+void Input(char a[1000])	//식 입력
+{
+	char aa[1000],c;
+	int i=0;
+	gets(aa);
+	for(int j=0; j<strlen(aa);++j)
+	{
+		c=aa[j];
+		if(c!=' ' && c!='\0')
+		{
+			a[i]=c;
+			++i;
+		}
+	}
+	a[i]='\0';
+	return;
+}
+char cut(char a[100][62], char b[100], char input[1000])	//숫자와 연산자 분리
+{
+	int k=0, j=0, n=1;
+	for(int i=1; i<strlen(input); ++i)
+	{
+		if(input[i]=='+' || input[i]=='-' || input[i]=='/' || input[i]=='*' || input[i]=='%')
+		{
+			k=i;
+			b[0]=input[i];
+			break;
+		}
+	}
+	for(int i=0; i<k; ++i)
+		a[0][i]=input[i];
+
+	for(int i=k+1, l=k; i<strlen(input);++i)
+	{
+		if(input[i]=='+' || input[i]=='-' || input[i]=='/' || input[i]=='*' || input[i]=='%')
+		{
+			b[n-1]=input[i];
+			for(int j=l+1; j<i; ++j)
+				a[n][j-l-1]=input[j];
+			++n;
+			l=k;
+			k=i;
+		}
+	}
+	for(int i=k+1; strlen(input); ++i)
+	{
+		a[n][i-k-1]=input[i];
+	}
+	++n;
+	return n;
+}
 char plus(char a[60], char b[60])
 {
 	char result[61];
@@ -75,50 +126,43 @@ int load(char var_name[10], char var[10][62])
 }
 int main(void)
 {
-	int k=0, l=0, i, j, var_number=0;
-	char aa[10000],c[100][61],a[100],s[100],var[10][61],var_name[10];
+	char input[1000];
+	char number[100][62], operator[100];
+	char var_name[10], var[10][62];
+	int var_number=0,n;
 	while(1)
 	{
-		
-		//숫자와 연산자 읽어들이기
-	
-		gets(aa);
-		for(i=0;i<strlen(aa);++i)
+		Input(input);
+		if(strcmp(input,"clear")==0)
+			system("clear");
+		else if(strcmp(input,"end")==0)
+			exit(1);
+		else if(strcmp(input,"save")==0)
+			save(var_name, var, var_number);
+		else if(strcmp(input,"load")==0)
+			var_number=load(var_name, var);
+		else if(strcmp(input,"VAR")==0)
 		{
-			if(aa[i]=='+' || aa[i]=='-' || aa[i]=='*' || aa[i]=='/' || aa[i] == '%')
+			for(int i=0; i < var_number; ++i)
 			{
-				if(k==0)
-				{
-					for(j=0;j<i-1;++j)
-					{
-						c[k][j]=aa[j];
-					}
-					l=i;
-					a[k]=aa[i];
-					++k;
-				}
-				else
-				{
-					for(j=l+2;j<i-1;++j)
-					{
-						c[k][j-l-2]=aa[j];
-					}
-					l=i;
-					a[k]=aa[i];
-					++k;
-				}
+				printf("%c %s\n",var_name[i], var[i]);
 			}
 		}
-		for(i=l+2;i<strlen(aa);++i)
+		else if(input[1]=='=')
 		{
-			c[k][i-l-2]=aa[i];
+			var_name[var_number]=input[0];
+			for(int i = 2; i < strlen(input); ++i)
+				var[var_number][i-2]=input[i];
+			++var_number;
 		}
-		if(aa[10000]=='c','l','e','a','r'){
-		system("clear");
-				
+		else
+		{
+			printf("%s",input);
+			n=cut(number,operator,input);
+			for(int i=0;i<n;++i)
+				printf("%s\n",number[i]);
+			for(int i=0;i<n-1;++i)
+				printf("%c\n",operator[i]);
 		}
-		if(aa[10000]=='e','n','d'){
-			exit(1);
-		}
-	++k;
-	}}	
+	}
+}
