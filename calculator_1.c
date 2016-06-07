@@ -49,26 +49,29 @@ void Exit()
 {
 	exit(1);
 }
-int load(char name[10], char var[10][61])
+void save(char var_name[10], char var[10][62], int var_number)
+{
+	FILE *ofp;
+	ofp=fopen("data.txt","w");
+	for(int i=0; i<var_number; ++i)
+		fprintf(ofp,"%c %s ",var_name[i], var[i]);
+	fclose(ofp);
+}
+int load(char var_name[10], char var[10][62])
 {
 	int var_number=0;
-	FILE*load;
-	load=fopen("velue.in","r");
-	fscanf(load,"%s",&var[10][61]);
-
-		//여기 채워넣어라
-	return var_number;
-}
-void save(char name[10], char var[10][61], int var_number)
-{
-	FILE*save;
-	save=fopen("velue.in","a");
-	if(var_number!=10){
-	fprintf(save,"%s",var[var_number][61]);
-	var_number++;
+	int c;
+	FILE *ifp;
+	ifp=fopen("data.txt","r");
+	while(c!=EOF)
+	{
+		fscanf(ifp,"%c %s",&var_name[var_number], &var[var_number]);
+		c=getc(ifp);
+		++var_number;
 	}
-
-
+	fclose(ifp);
+	--var_number;
+	return var_number;
 }
 int main(void)
 {
