@@ -52,6 +52,33 @@ char cut(char a[100][62], char b[100], char input[1000])	//숫자와 연산자 �
 	++n;
 	return n;
 }
+void array(char a[63], char b[63])		//a : 원래 숫자, b : 재배열한 숫자
+{
+	int i, j, n=1;
+	for(i=0; i<strlen(a); ++i)
+	{
+		if(a[i]=='.')
+		{
+			b[50]=a[i];
+			for(j=i+1; j<strlen(a); ++j)
+			{
+				b[50+n]=a[j];
+				++n;
+			}
+			b[j]='\0';
+			n=1;
+			for(j=i-1; j>=0; --j)
+			{
+				b[50-n]=a[j];
+				++n;
+			}
+			for(j=50-i-1; j>=0; --j)
+				b[j]=' ';
+			break;
+		}
+	}
+	return;
+}
 char plus(char a[60], char b[60])
 {
 	char result[61];
