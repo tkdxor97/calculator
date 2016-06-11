@@ -172,7 +172,6 @@ void multiple(char a[63], char b[63], char result2[63])
 		result2[50-k]='.';
 		for(int i=50; i<59; ++i)
 			result2[i-k+1]=result[i]+'0';
-
 	}
 	return;
 }
