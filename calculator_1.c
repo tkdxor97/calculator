@@ -54,18 +54,19 @@ char cut(char a[100][62], char b[100], char input[1000])	//숫자와 연산자 �
 }
 void array(char a[63], char b[63])		//a : 원래 숫자, b : 재배열한 숫자
 {
-	int i, j, n=1;
+	int i, j, n=1, s=0;
 	for(i=0; i<strlen(a); ++i)
 	{
 		if(a[i]=='.')
 		{
+			s=1;
 			b[50]=a[i];
 			for(j=i+1; j<strlen(a); ++j)
 			{
 				b[50+n]=a[j];
 				++n;
 			}
-			b[j]='\0';
+			b[50+n]='\0';
 			n=1;
 			for(j=i-1; j>=0; --j)
 			{
@@ -74,8 +75,20 @@ void array(char a[63], char b[63])		//a : 원래 숫자, b : 재배열한 숫자
 			}
 			for(j=50-i-1; j>=0; --j)
 				b[j]=' ';
-			break;
+			return;
 		}
+	}
+	n=1;
+	if(s==0)
+	{
+		b[50]='\0';
+		for(i=strlen(a);i>0;--i)
+		{
+			b[50-n]=a[i-1];
+			++n;
+		}
+		for(i=0; i<=50-n; ++i)
+			b[i]=' ';
 	}
 	return;
 }
@@ -107,6 +120,75 @@ char minus(char a[60], char b[60])
 	return result[61];
 }
 
+void multiple(char a[63], char b[63], char result2[63])
+{
+	char a2[63], b2[63];
+	int result[73]={0}, k=0, s;
+	strcpy(a,"1345135.451451451");
+	strcpy(b,"786251.414214527");
+	array(a,a2);
+	array(b,b2);
+	for(int i=51; i<60; ++i)
+	{
+		a2[i-1]=a2[i];
+		b2[i-1]=b2[i];
+	}
+	a2[strlen(a2)-1]='\0';
+	b2[strlen(b2)-1]='\0';
+	for(int i=strlen(b2);i>0;--i)
+	{
+		if(b2[i]>='0' && b2[i]<='9')
+		{
+			for(int j=0; j<strlen(a2); ++j)
+			{
+				if(a2[j]>='0' && a2[j]<='9')	
+					result[i-(49-j)]+=(b2[i]-'0') * (a2[j]-'0');
+			}
+		}
+	}
+	if(result[0]>=10)
+	{
+		printf("error\n");
+		return;
+	}
+	for(int i=0; i<73; ++i)
+	{
+		printf("%d %d\n",i,result[i]);
+	}
+	for(int i=73; i>0; --i)
+	{
+		if(result[i]>=10)
+		{
+			result[i-1]+=(result[i]-(result[i]%10))/10;
+			result[i]=result[i]%10;
+		}
+	}
+	for(int i=0; i<50; ++i)
+	{
+		if(result[i]!=0)
+		{
+			k=i;
+			break;
+		}
+	}
+	for(int i=k; i<50; ++i)
+		result2[i-k]=result[i]+'0';
+	for(int i=51; i<60; ++i)
+	{
+		if(result[i-1]!=0)
+		{
+			s=1;
+			break;
+		}
+	}
+	if(s==1)
+	{
+		result2[50-k]='.';
+		for(int i=50; i<59; ++i)
+			result2[i-k+1]=result[i]+'0';
+	}
+	return;
+}
 char division(char a[60], char b[60])
 {//배열째로 나눗셈 16/2 면 [1,6]/[2], [2] > [4] > [8] > [1,6] 나눠지는 값과 배열이 같아질 때까지 몫+1
  //나누는 값이 나눠지는 값보다 작을 때까지 반복문
