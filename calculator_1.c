@@ -156,7 +156,7 @@ int main(void)
 	char input[1000];
 	char number[100][62], operator[100];
 	char var_name[10], var[10][62];
-	int var_number=0,n;
+	int var_number=0,n,plus_minus[100]={0};	//n : 숫자의 갯수, plus_minus : 양수/음수 구분(양수 : 0, 음수 : 1)
 	while(1)
 	{
 		Input(input);
@@ -186,6 +186,16 @@ int main(void)
 		{
 			printf("%s",input);
 			n=cut(number,operator,input);
+			for(int i=0; i<n; ++i)
+			{
+				if(number[i][0]=='-')
+				{
+					plus_minus[i]=1;
+					for(int j=1; j<strlen(number[i]); ++j)
+						number[i][j-1]=number[i][j];
+					number[i][strlen(number[j])-1]='\0';
+				}
+			}
 			for(int i=0;i<n;++i)
 				printf("%s\n",number[i]);
 			for(int i=0;i<n-1;++i)
