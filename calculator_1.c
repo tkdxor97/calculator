@@ -100,17 +100,25 @@ void plus(char a[62], char b[62], char result[63])
 
 	array(a, e);
 	array(b, f);
+	printf("\n%s\n%s",e,f);
 
-	for (int i = 62; i >= 0; i--)
+	for (int i = 60; i >= 0; i--)
 	{
-		if (e[i]==' '&& (f[i]>='0'&&f[i]<='9'))
-			c[i] = (e[i]-' ')+(f[i]-'0');
-		else if (f[i]==' '&& (e[i]>='0'&&e[i]<='9'))
-			c[i] = (e[i]-'0')+(f[i]-' ');
-		else
+		if ((f[i]>='0'&&f[i]<='9')&&(e[i]>='0')&&(e[i]<='9'))
+		{
 			c[i] = (e[i]-'0')+(f[i]-'0');
+		}
+		else 
+		{
+			if (f[i]>='0'&&f[i]<='9')
+				c[i] = (f[i]-'0');
+			else if (e[i]>='0'&&e[i]<='9')
+				c[i] = (e[i]-'0');
+			else
+				c[i] = 0;
+		}
 	}
-	for (int i = 62; i >= 0; i--)
+	for (int i = 60; i >= 0; i--)
 	{
 		if (c[i]>9)
 		{
@@ -121,8 +129,21 @@ void plus(char a[62], char b[62], char result[63])
 		if ((e[i]=='.'||f[i]=='.'))
 			c[50] = '.';
 	}
-	for (int i=0; i <= 63; i++)
-		result[i]=c[i];
+	for (int i = 0; i <= 63; i++)
+		result[i] = c[i];
+	while (result[1]=='0')
+		for(int i=2; i<strlen(result); ++i)
+			result[i-1]=result[i];
+	if (result[0]=='0')
+		for (int i=1; i< strlen(result);++i)
+			result[i-1]=result[i];
+	for(int i=strlen(result)-1;i>0;--i)
+	{
+		if(result[i]=='0')
+			result[i]='\0';
+		else
+			break;
+	}
 	return ;
 }
 void minus(char a[62], char b[62], char result[63])
