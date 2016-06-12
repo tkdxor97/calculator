@@ -333,7 +333,8 @@ int load(char var_name[10], char var[10][62])
 }
 void change_var(char number[100][62], char var_name[10], char var[10][62])
 {
-	int i, j, k, v;
+	int i, j, k, m, n, v;
+	char changed_var[10][62];
 	for(i = 0; i <= 100; ++i)
 		for(j = 0; j <= 62; ++j)
 		{
@@ -341,7 +342,9 @@ void change_var(char number[100][62], char var_name[10], char var[10][62])
 			if(((v >= 65)) && (v <=90) || ((v >= 97) && (v <= 122)))
 				for(k = 0; k <= 10; ++k)
 					if(v == var_name[k])
-						strcpy(number[i][j], var[k][]);
+						for(m = 0; m <= 10; ++m)
+							for(n = 0; n <= 62; ++m)
+								strcpy(changed_var[10][62], var[k][]);
 		}
 }
 
