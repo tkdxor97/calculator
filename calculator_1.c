@@ -104,22 +104,49 @@ char plus(char a[60], char b[60])
 	}
 	return result[61];
 }
-char minus(char a[60], char b[60])
+void minus(char a[62], char b[62], char result[63])
 {
-	char result[61];
-	int i;
-	for (i=60; i < 1; i--)
+	char c[62]={};
+	char e[62]={};
+	char f[62]={};
+	array(a, e);
+	array(b, f);
+	
+	printf("%s\n%s\n", e, f);
+	for (int i=61;i >= 0; i--)
 	{
-		result[i+1]=(a[i]-48)-(b[i]-48);
-		if (result[i+1]<0)
+		if (strcmp(e,f) > 0)		//a가 b보다 클 때
 		{
-			a[i-1] = a[i-1] - 1;
-			result[i+1] += 10 ;
+			if (f[i]==' '&& (e[i]>='0'&&e[i]<='9'))
+				c[i] = (e[i]-'0')-(f[i]-' ');
+			else
+				c[i] = (e[i]-'0')-(f[i]-'0');
+		}
+		else if (strcmp(e,f) < 0)	//a가 b보다 작을 때	
+		{
+			if (e[i]==' '&& (f[i]>='0'&&f[i]<='9'))
+				c[i] = (f[i]-'0')-(e[i]-' ');
+			else
+				c[i] = (f[i]-'0')-(e[i]-'0');
 		}
 	}
-	return result[61];
+	for (int i=61; i >= 0; i--)
+	{
+		if (c[i] < 0)
+		{
+			c[i] += 10;
+			c[i-1]--;
+		}
+		c[i] += '0';
+		if ((e[i]=='.'||f[i]=='.'))
+			c[50] = '.';				//소수점 찍기
+	}
+	for (int i = 0; i <= 63; i++)
+		result[i+1] = c[i];				//한자리식 미뤄서 result에 배열
+	if (strcmp(e, f) < 0)
+		result[0] = '-';				//음수일 경우 '-'' result[0]에 넣기
+	return;
 }
-
 void multiple(char a[63], char b[63], char result2[63])
 {
 	char a2[63], b2[63];
