@@ -92,6 +92,47 @@ void array(char a[63], char b[63])		//a : 원래 숫자, b : 재배열한 숫자
 	}
 	return;
 }
+void array2(char a[100], char b[100])
+{
+	strcpy(b,"");
+	int i, j, n=1, s=0;
+	for(i=0; i<strlen(a); ++i)
+	{
+		if(a[i]=='.')
+		{
+			s=1;
+			b[50]=a[i];
+			for(j=i+1; j<strlen(a); ++j)
+			{
+				b[50+n]=a[j];
+				++n;
+			}
+			b[50+n]='\0';
+			n=1;
+			for(j=i-1; j>=0; --j)
+			{
+				b[50-n]=a[j];
+				++n;
+			}
+			for(j=50-i-1; j>=0; --j)
+				b[j]=' ';
+			return;
+		}
+	}
+	n=1;
+	if(s==0)
+	{
+		b[50]='\0';
+		for(i=strlen(a);i>0;--i)
+		{
+			b[50-n]=a[i-1];
+			++n;
+		}
+		for(i=0; i<=50-n; ++i)
+			b[i]=' ';
+	}
+	return;
+}
 void plus(char a[62], char b[62], char result[63])
 {
 	char c[62]={};
@@ -248,12 +289,112 @@ void minus(char a[62], char b[62], char result2[63])
 	}
 	strcpy(result2,result);
 }
+void minus2(char a[100], char b[100], char result2[100])
+{
+	if(strcmp(a,b)==0)
+	{
+		strcpy(result2,"0");
+		return;
+	}
+	char a2[100], b2[100], result[100];
+	int i,c[100]={0},sw;		//sw=1 : a-b?옜, sw=0 : a-b?옜
+	array2(a,a2);
+	array2(b,b2);
+	if(strlen(a2)>strlen(b2))
+	{
+		for(i=strlen(b2);i<strlen(a2);++i)
+			b2[i]='0';
+		b2[i]='\0';
+	}
+	else if(strlen(a2)<strlen(b2))
+	{
+		for(i=strlen(a2); i<strlen(b2); ++i)
+			a2[i]='0';
+		a2[i]='\0';
+	}
+	for(int i=0; i<70; ++i)
+	{
+		if(a2[i]==' ')
+			a2[i]='0';
+		if(b2[i]==' ')
+			b2[i]='0';
+	}
+	for(int i=0; i<70; ++i)
+	{
+		if(a2[i]>b2[i])
+		{
+			sw=1;
+			break;
+		}
+		else if(b2[i]>a2[i])
+		{
+			sw=0;
+			break;
+		}
+	}
+	if(sw==1)
+	{
+		for(int i=0; i<strlen(a2); ++i)
+			c[i]=(a2[i]-'0')-(b2[i]-'0');
+	}
+	else if(sw==0)
+	{
+		for(int i=0; i<strlen(a2); ++i)
+			c[i]=(b2[i]-'0')-(a2[i]-'0');
+	}
+	for(int i=69; i>51; --i)
+		if(c[i]<0)
+		{
+			c[i]+=10;
+			--c[i-1];
+		}
+	if(c[51]<0)
+	{
+		c[51]+=10;
+		--c[49];
+	}
+	for(int i=49; i>0; --i)
+		if(c[i]<0)
+		{
+			c[i]+=10;
+			--c[i-1];
+		}
+	for(int i=0; i<70; ++i)
+		result[i+1]=c[i]+'0';
+	result[51]='.';
+	result[71]='\0';
+	if(sw==0)
+		result[0]='-';
+	while(result[1]=='0')
+		for(int i=2; i<strlen(result); ++i)
+			result[i-1]=result[i];
+	if(result[0]!='-')
+		for(int i=1; i<strlen(result); ++i)
+			result[i-1]=result[i];
+	for(int i=70; i>0; --i)
+	{
+		if(result[i]=='0')
+			result[i]='\0';
+		else if(result[i]=='.')
+		{
+			result[i]='\0';
+			break;
+		}
+		else
+			break;
+	}
+	if(result[0]=='.')
+	{
+		for(int i=strlen(result); i>=0; --i)
+			result[i+1]=result[i];
+		result[0]='0';
+	}
+	strcpy(result2,result);
+}
 void multiple(char a[63], char b[63], char result2[63])
 {
 	char a2[63], b2[63];
 	int result[73]={0}, k=0, s;
-	strcpy(a,"1345135.451451451");
-	strcpy(b,"786251.414214527");
 	array(a,a2);
 	array(b,b2);
 	for(int i=51; i<60; ++i)
@@ -279,12 +420,8 @@ void multiple(char a[63], char b[63], char result2[63])
 		printf("error\n");
 		return;
 	}
-	for(int i=0; i<73; ++i)
-	{
-		printf("%d %d\n",i,result[i]);
-	}
 	for(int i=73; i>0; --i)
-	{
+	{	
 		if(result[i]>=10)
 		{
 			result[i-1]+=(result[i]-(result[i]%10))/10;
@@ -317,19 +454,228 @@ void multiple(char a[63], char b[63], char result2[63])
 	}
 	return;
 }
-char division(char a[60], char b[60])
-{//배열째로 나눗셈 16/2 면 [1,6]/[2], [2] > [4] > [8] > [1,6] 나눠지는 값과 배열이 같아질 때까지 몫+1
- //나누는 값이 나눠지는 값보다 작을 때까지 반복문
-
+int divide_func(char a[100], char b[100], int ss, int n)
+{
+	if(ss==1)
+		return n;
+	char a2[100], b2[100];
+	int sw=0;
+	while(1)
+	{
+		sw=0;
+		array2(a,a2);
+		array2(b,b2);
+		for(int i=0; i<50; ++i)
+		{
+			if(a2[i]>'0' && a2[i]<='9')
+			{
+				if(b2[i]==' ' || b2[i]=='0')
+				{
+					sw=1;
+					if(b2[50]=='.')
+					{
+						for(int j=1; j<50; ++j)
+							b2[j-1]=b2[j];
+						--n;
+						b2[49]=b2[51];
+						for(int j=52; j<=strlen(b2); ++j)
+							b2[j-1]=b2[j];
+						break;
+					}
+					else
+					{
+						for(int j=1; j<50; ++j)
+							b2[j-1]=b2[j];
+						--n;
+						b2[49]='0';
+						break;
+					}
+				}
+				else
+					break;
+			}
+		}
+		if(sw==0)
+		{
+			for(int i=51; i<=strlen(a2); ++i)
+			{
+				if(a2[i]>'0' && a2[i]<='9')
+				{
+					if(b2[i]=='0')
+					{
+						sw=1;
+						for(int j=1; j<50; ++j)
+							b2[j-1]=b2[j];
+						--n;
+						b2[49]=b2[51];
+						for(int j=52; j<=strlen(b2); ++j)
+							b2[j-1]=b2[j];
+					}
+				}
+				else
+					break;
+			}
+		}
+		while(b2[0]==' ')
+		{
+			for(int i=1; i<=strlen(b2); ++i)
+			{
+				b2[i-1]=b2[i];
+			}
+		}
+		strcpy(b,b2);
+		if(sw==0)
+			break;
+	}
+	if(b[1]!='.')
+	{
+		while(b[0]=='0')
+		{
+			for(int i=1; i<=strlen(b); ++i)
+			{
+				b[i-1]=b[i];
+			}
+		}
+	}
+	++n;
+	return n;	
+}
+void divide(char a[100], char b[100], char result[100])
+{
+	char a2[100], b2[100], c[100];
+	int s[63]={0},sw=1, k=0,n=0, ss=0;
+	n=divide_func(a,b,ss,n);
+	ss=1;
+	while(1)
+	{
+		k=0;
+		array2(a,a2);
+		array2(b,b2);
+		for(int i=strlen(a2)-1; i>=50; --i)
+		{
+			if(a2[i]=='0')
+				a2[i]='\0';
+			else if(a2[i]=='.')
+				a2[i]='\0';
+			else
+				break;
+		}
+		for(int i=strlen(b2)-1; i>=50; --i)
+		{
+			if(b2[i]=='0')
+				b2[i]='\0';
+			else if(b2[i]=='.')
+				b2[i]='\0';
+			else
+				break;
+		}
+		for(int i=0; i<70; ++i)
+		{
+			sw=0;
+			if(a2[i]>b2[i])
+			{
+				sw=1;
+				break;
+			}
+			else if(a2[i]<b2[i])
+			{
+				sw=2;
+				break;
+			}
+		}
+		if(sw==2)
+		{
+			for(int i=0; i<60; ++i)
+			{
+				if(b[i]=='.')
+				{
+					k=i;
+					break;
+				}
+			}
+			if(k==0)
+			{
+				b[strlen(b)]=b[strlen(b)-1];
+				b[strlen(b)-1]=b[strlen(b)-2];
+				b[strlen(b)-2]='.';
+			}
+			else
+			{
+				if(k==1 && b[0]=='.')
+				{
+					for(int i=strlen(b); i>1; --i)
+					{
+						b[i+1]=b[i];
+					}
+					b[2]='0';
+				}
+				else if(k==1)
+				{
+					for(int i=strlen(b); i>1; --i)
+					{
+						
+						b[i+1]=b[i];
+					}
+					b[2]=b[0];
+					b[0]='0';
+				}
+				else
+				{
+					b[k]=b[k-1];
+					b[k-1]='.';	
+				}
+			}
+			++n;
+		}
+		else if(sw==1)
+		{
+			minus2(a,b,c);
+			strcpy(a,c);
+			s[49+n]++;
+			for(int i=58; i>0; --i)
+			{
+				if(s[i]>=10)
+				{
+					++s[i-1];
+					s[i]-=10;
+				}
+			}
+		}
+		if(strcmp(a2,b2)==0)
+		{
+			s[49+n]++;
+			for(int i=58; i>0; --i)
+			{
+				if(s[i]>=10)
+				{
+					++s[i-1];
+					s[i]-=10;
+				}
+			}
+			break;
+		}
+		if(n>9)
+			break;
+	}
+	for(int i=0; i<50; ++i)
+		result[i]=s[i]+'0';
+	result[50]='.';
+	for(int i=50; i<59; ++i)
+		result[i+1]=s[i]+'0';
+	while(result[0]=='0')
+	{
+		if(result[1]=='.')
+			break;
+		for(int i=1; i<=strlen(result);++i)
+			result[i-1]=result[i];
+	}
 }
 void mod(char a[63], char b[63], char result2[63])
 {
 	char result[63];
 	while(1)
 	{
-		printf("Hello\n");
 		minus(a,b,result);
-		printf("%s %s %s\n",a,b,result);
 		strcpy(a,result);
 		if(a[0]=='-')
 		{
@@ -346,13 +692,27 @@ void mod(char a[63], char b[63], char result2[63])
 		}
 	}
 }
-void Clear()
+void mod(char a[63], char b[63], char result2[63])
 {
-	system("clear");
-}
-void Exit()
-{
-	exit(1);
+	char result[63];
+	while(1)
+	{
+		minus(a,b,result);
+		strcpy(a,result);
+		if(a[0]=='-')
+		{
+			for(int i=1; i<=strlen(a); ++i)
+				a[i-1]=a[i];
+			minus(b,a,result);
+			strcpy(result2,result);
+			return;
+		}
+		else if(a[0]=='0')
+		{
+			strcpy(result2,"0");
+			return;
+		}
+	}
 }
 void save(char var_name[10], char var[10][62], int var_number)
 {
