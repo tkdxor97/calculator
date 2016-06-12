@@ -146,80 +146,107 @@ void plus(char a[62], char b[62], char result[63])
 	}
 	return ;
 }
-void minus(char a[62], char b[62], char result[63])
+void minus(char a[62], char b[62], char result2[63])
 {
-	char c[62]={};
-	char e[62]={};
-	char f[62]={};
-	array(a, e);
-	array(b, f);
-	
-	for (int i=62;i >= 0; i--)
+	if(strcmp(a,b)==0)
 	{
-		if (strcmp(e,f) > 0)		//a가 b 보다 클때
-		{
-			if ((e[i]>='0'&&e[i]<='9')&&(f[i]>='0'&&f[i]<='9'))		
-			{
-				c[i] = (e[i]-'0')-(f[i]-'0');
-			}
-			else
-			{
-				if (f[i]==' '&& (e[i]>='0'&&e[i]<='9'))			
-					c[i] = (e[i]-'0')-(f[i]-' ');
-				else if (e[i]>='0'&&e[i]<='9')				
-					c[i] = (e[i]-'0');
-				else if (f[i]>='0'&&f[i]<='9')
-					c[i] = (f[i]-'0');
-			}
-		}
-		else if (strcmp(e,f) < 0)	//a가 b보다 작을 때		
-		{
-			if ((e[i]>='0'&&e[i]<='9')&&(f[i]>='0'&&f[i]<='9'))
-			{
-				c[i] = (f[i]-'0')-(e[i]-'0');
-			}
-			else
-			{
-				if (e[i]==' '&&(f[i]>='0'&&f[i]<='9'))
-					c[i] = (f[i]-'0')-(e[i]-' ');
-				else if (e[i]>='0'&&e[i]<='9')
-					c[i] = (e[i]-'0');
-				else if (f[i]>='0'&&f[i]<='9')
-					c[i] = (f[i]-'0');
-			}
-		}
-		else						//a와 b가 같을 때(미완성)
-			c[49]=0;
+		strcpy(result2,"0");
+		return;
 	}
-	for (int i=62; i >= 0; i--)
+	char a2[63], b2[63], result[63];
+	int i,c[63]={0},sw;		//sw=1 : a-b?옜, sw=0 : a-b?옜
+	array(a,a2);
+	array(b,b2);
+	if(strlen(a2)>strlen(b2))
 	{
-		if (c[i] < 0)
-		{
-			c[i] += 10;
-			c[i-1]--;
-		}
-		c[i] += '0';
-		if ((e[i]=='.'||f[i]=='.'))
-			c[50] = '.';
+		for(i=strlen(b2);i<strlen(a2);++i)
+			b2[i]='0';
+		b2[i]='\0';
 	}
-	for (int i = 0; i <= 63; i++)
-		result[i] = c[i];
-	if (strcmp(e, f) < 0)
-		result[0] = '-';
-	while (result[1]=='0')
+	else if(strlen(a2)<strlen(b2))
+	{
+		for(i=strlen(a2); i<strlen(b2); ++i)
+			a2[i]='0';
+		a2[i]='\0';
+	}
+	for(int i=0; i<60; ++i)
+	{
+		if(a2[i]==' ')
+			a2[i]='0';
+		if(b2[i]==' ')
+			b2[i]='0';
+	}
+	for(int i=0; i<60; ++i)
+	{
+		if(a2[i]>b2[i])
+		{
+			sw=1;
+			break;
+		}
+		else if(b2[i]>a2[i])
+		{
+			sw=0;
+			break;
+		}
+	}
+	if(sw==1)
+	{
+		for(int i=0; i<strlen(a2); ++i)
+			c[i]=(a2[i]-'0')-(b2[i]-'0');
+	}
+	else if(sw==0)
+	{
+		for(int i=0; i<strlen(a2); ++i)
+			c[i]=(b2[i]-'0')-(a2[i]-'0');
+	}
+	for(int i=59; i>51; --i)
+		if(c[i]<0)
+		{
+			c[i]+=10;
+			--c[i-1];
+		}
+	if(c[51]<0)
+	{
+		c[51]+=10;
+		--c[49];
+	}
+	for(int i=49; i>0; --i)
+		if(c[i]<0)
+		{
+			c[i]+=10;
+			--c[i-1];
+		}
+	for(int i=0; i<60; ++i)
+		result[i+1]=c[i]+'0';
+	result[51]='.';
+	result[61]='\0';
+	if(sw==0)
+		result[0]='-';
+	while(result[1]=='0')
 		for(int i=2; i<strlen(result); ++i)
 			result[i-1]=result[i];
-	if (result[0]=='0')
-		for (int i=1; i< strlen(result);++i)
+	if(result[0]!='-')
+		for(int i=1; i<strlen(result); ++i)
 			result[i-1]=result[i];
-	for(int i=strlen(result)-1;i>0;--i)
+	for(int i=60; i>0; --i)
 	{
 		if(result[i]=='0')
 			result[i]='\0';
+		else if(result[i]=='.')
+		{
+			result[i]='\0';
+			break;
+		}
 		else
 			break;
 	}
-	return;
+	if(result[0]=='.')
+	{
+		for(int i=strlen(result); i>=0; --i)
+			result[i+1]=result[i];
+		result[0]='0';
+	}
+	strcpy(result2,result);
 }
 void multiple(char a[63], char b[63], char result2[63])
 {
@@ -295,9 +322,29 @@ char division(char a[60], char b[60])
  //나누는 값이 나눠지는 값보다 작을 때까지 반복문
 
 }
-char mod(char a[60], char b[60])
+void mod(char a[63], char b[63], char result2[63])
 {
-
+	char result[63];
+	while(1)
+	{
+		printf("Hello\n");
+		minus(a,b,result);
+		printf("%s %s %s\n",a,b,result);
+		strcpy(a,result);
+		if(a[0]=='-')
+		{
+			for(int i=1; i<=strlen(a); ++i)
+				a[i-1]=a[i];
+			minus(b,a,result);
+			strcpy(result2,result);
+			return;
+		}
+		else if(a[0]=='0')
+		{
+			strcpy(result2,"0");
+			return;
+		}
+	}
 }
 void Clear()
 {
