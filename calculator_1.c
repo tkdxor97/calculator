@@ -154,24 +154,44 @@ void minus(char a[62], char b[62], char result[63])
 	array(a, e);
 	array(b, f);
 	
-	for (int i=61;i >= 0; i--)
+	for (int i=62;i >= 0; i--)
 	{
-		if (strcmp(e,f) > 0)		//a가 b보다 클 때
+		if (strcmp(e,f) > 0)		//a가 b 보다 클때
 		{
-			if (f[i]==' '&& (e[i]>='0'&&e[i]<='9'))
-				c[i] = (e[i]-'0');
-			else
+			if ((e[i]>='0'&&e[i]<='9')&&(f[i]>='0'&&f[i]<='9'))		
+			{
 				c[i] = (e[i]-'0')-(f[i]-'0');
-		}
-		else if (strcmp(e,f) < 0)	//a가 b보다 작을 때	
-		{
-			if (e[i]==' '&& (f[i]>='0'&&f[i]<='9'))
-				c[i] = (f[i]-'0');
+			}
 			else
-				c[i] = (f[i]-'0')-(e[i]-'0');
+			{
+				if (f[i]==' '&& (e[i]>='0'&&e[i]<='9'))			
+					c[i] = (e[i]-'0')-(f[i]-' ');
+				else if (e[i]>='0'&&e[i]<='9')				
+					c[i] = (e[i]-'0');
+				else if (f[i]>='0'&&f[i]<='9')
+					c[i] = (f[i]-'0');
+			}
 		}
+		else if (strcmp(e,f) < 0)	//a가 b보다 작을 때		
+		{
+			if ((e[i]>='0'&&e[i]<='9')&&(f[i]>='0'&&f[i]<='9'))
+			{
+				c[i] = (f[i]-'0')-(e[i]-'0');
+			}
+			else
+			{
+				if (e[i]==' '&&(f[i]>='0'&&f[i]<='9'))
+					c[i] = (f[i]-'0')-(e[i]-' ');
+				else if (e[i]>='0'&&e[i]<='9')
+					c[i] = (e[i]-'0');
+				else if (f[i]>='0'&&f[i]<='9')
+					c[i] = (f[i]-'0');
+			}
+		}
+		else						//a와 b가 같을 때(미완성)
+			c[49]=0;
 	}
-	for (int i=61; i >= 0; i--)
+	for (int i=62; i >= 0; i--)
 	{
 		if (c[i] < 0)
 		{
@@ -180,12 +200,25 @@ void minus(char a[62], char b[62], char result[63])
 		}
 		c[i] += '0';
 		if ((e[i]=='.'||f[i]=='.'))
-			c[50] = '.';				//소수점 찍기
+			c[50] = '.';
 	}
 	for (int i = 0; i <= 63; i++)
-		result[i+1] = c[i];				//한자리식 미뤄서 result에 배열
+		result[i] = c[i];
 	if (strcmp(e, f) < 0)
-		result[0] = '-';				//음수일 경우 '-'' result[0]에 넣기
+		result[0] = '-';
+	while (result[1]=='0')
+		for(int i=2; i<strlen(result); ++i)
+			result[i-1]=result[i];
+	if (result[0]=='0')
+		for (int i=1; i< strlen(result);++i)
+			result[i-1]=result[i];
+	for(int i=strlen(result)-1;i>0;--i)
+	{
+		if(result[i]=='0')
+			result[i]='\0';
+		else
+			break;
+	}
 	return;
 }
 void multiple(char a[63], char b[63], char result2[63])
