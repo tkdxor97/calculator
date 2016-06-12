@@ -138,14 +138,14 @@ void minus(char a[62], char b[62], char result[63])
 		if (strcmp(e,f) > 0)		//a가 b보다 클 때
 		{
 			if (f[i]==' '&& (e[i]>='0'&&e[i]<='9'))
-				c[i] = (e[i]-'0')-(f[i]-' ');
+				c[i] = (e[i]-'0');
 			else
 				c[i] = (e[i]-'0')-(f[i]-'0');
 		}
 		else if (strcmp(e,f) < 0)	//a가 b보다 작을 때	
 		{
 			if (e[i]==' '&& (f[i]>='0'&&f[i]<='9'))
-				c[i] = (f[i]-'0')-(e[i]-' ');
+				c[i] = (f[i]-'0');
 			else
 				c[i] = (f[i]-'0')-(e[i]-'0');
 		}
