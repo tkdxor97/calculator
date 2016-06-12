@@ -92,7 +92,6 @@ void minus(char a[62], char b[62], char result[63])
 	int i;
 	array(a, e);
 	array(b, f);
-	printf("%d %d",strlen(e), strlen(f));
 	if(strlen(e)>strlen(f))
 	{
 		for(i=strlen(f); i<strlen(e); ++i)
@@ -142,6 +141,18 @@ void minus(char a[62], char b[62], char result[63])
 		result[i+1] = c[i];
 	if (strcmp(e, f) < 0)
 		result[0] = '-';
-	
+	while(result[1]=='0')
+		for(int i=2; i<strlen(result); ++i)
+			result[i-1]=result[i];
+	if(result[0]=='0')
+		for(i=1; i<strlen(result); ++i)
+			result[i-1]=result[i];
+	for(int i=strlen(result)-1; i>0; --i)
+	{
+		if(result[i]=='0')
+			result[i]='\0';
+		else
+			break;
+	}
 	return;
 }
