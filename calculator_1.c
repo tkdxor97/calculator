@@ -333,8 +333,7 @@ int load(char var_name[10], char var[10][62])
 }
 void change_var(char number[100][62], char var_name[10], char var[10][62])
 {
-	int i, j, k, m, n, v;
-	char changed_var[10][62];
+	int i, j, k, v;
 	for(i = 0; i <= 100; ++i)
 		for(j = 0; j <= 62; ++j)
 		{
@@ -342,9 +341,7 @@ void change_var(char number[100][62], char var_name[10], char var[10][62])
 			if(((v >= 65)) && (v <=90) || ((v >= 97) && (v <= 122)))
 				for(k = 0; k <= 10; ++k)
 					if(v == var_name[k])
-						for(m = 0; m <= 10; ++m)
-							for(n = 0; n <= 62; ++m)
-								strcpy(changed_var[10][62], var[k][]);
+						strcpy(number[i][j], var[k]);
 		}
 }
 
@@ -354,8 +351,12 @@ int main(void)
 	char number[100][62], operator[100];
 	char var_name[10], var[10][62];
 	int var_number=0,n,plus_minus[100]={0};	//n : 숫자의 갯수, plus_minus : 양수/음수 구분(양수 : 0, 음수 : 1)
+	char *ptr;
+	int r;
+	printf("Start....\n");
 	while(1)
 	{
+		printf("(input) ");
 		Input(input);
 		if(strcmp(input,"clear")==0)
 			system("clear");
@@ -369,16 +370,45 @@ int main(void)
 		{
 			for(int i=0; i < var_number; ++i)
 			{
-				printf("%c %s\n",var_name[i], var[i]);
+				printf("\t  ");
+				printf("%c = %s\n",var_name[i], var[i]);
 			}
-		}
+		 } 
 		else if(input[1]=='=')
 		{
+			ptr=strchr(var_name,input[0]);
 			var_name[var_number]=input[0];
-			for(int i = 2; i < strlen(input); ++i)
-				var[var_number][i-2]=input[i];
-			++var_number;
+			if(var_number==10&&ptr==NULL){
+				printf("\t  ");
+				printf("= ERROR\n");
+				continue;}
+			for(int i = 2; i < strlen(input); ++i){
+			if(ptr!=NULL){
+				r=ptr-var_name;
+				var[r][i-2]=input[i];
+			}
+			else
+			{var[var_number][i-2]=input[i];}}
+			printf("\t  ");
+			if(ptr!=NULL)
+			printf("= %s\n",var[r]);
+			else
+			{printf("= %s\n",var[var_number]);
+			++var_number;}
+		
 		}
+			ptr=strchr(var_name,input[0]);
+			for(int i=0;i<var_number;i++){
+			if((input[0]>='a'&&input[0]<='z')||(input[0]>='A'&&input[0]<='Z')){
+			if(input[0]==var_name[i]&&strlen(input)==1){
+			printf("\t  ");
+				printf("= %s\n",var[i]);
+			}}}
+			if((input[0]>='a'&&input[0]<='z')||(input[0]>='A'&&input[0]<='Z')){
+			if(ptr==NULL&&strlen(input)==1){
+			printf("\t  ");
+				printf("= undefined\n");
+				}}
 		else
 		{
 			printf("%s",input);
@@ -400,3 +430,4 @@ int main(void)
 		}
 	}
 }
+
