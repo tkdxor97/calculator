@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 int n=1;
-void Input(char a[1000])
+void Input(char a[1000])	//입력 시 공백을 제외하여 input배열에 저장
 {
 	char aa[1000],c;
 	int i=0;
@@ -19,7 +19,7 @@ void Input(char a[1000])
 	a[i]='\0';
 	return;
 }
-void cut(char a[100][63], char b[100], char input[1000])
+void cut(char a[100][63], char b[100], char input[1000])	//입력된 것을 숫자와 연산자로 구분
 {
 	int k=0, j=0;
 	for(int i=1; i<strlen(input); ++i)
@@ -63,7 +63,7 @@ void cut(char a[100][63], char b[100], char input[1000])
 		}
 	}
 }
-void array(char a[63], char b[63])
+void array(char a[63], char b[63])	//연산 처리를 쉽게 하기 위해 0~49번째 배열에 정수를, 50번째 배열에 '.'를, 51~59번째 배열에 소수부분을 입력하는 함수
 {
 	strcpy(b,"");
 	int i, j, n=1, s=0;
@@ -104,7 +104,7 @@ void array(char a[63], char b[63])
 	}
 	return;
 }
-void array2(char a[100], char b[100])
+void array2(char a[100], char b[100])	//나누기 함수를 위해 소수점을 늘려 놓은 함수
 {
 	strcpy(b,"");
 	int i, j, n=1, s=0;
@@ -167,7 +167,7 @@ void comma(char result[63])
 			printf(",");
 	}
 }
-void save(char var_name[10], char var[10][63], int var_number)
+void save(char var_name[10], char var[10][63], int var_number)	//save입력시 입력된 변수 data.txt파일에 저장하기
 {
 	FILE *ofp;
 	ofp=fopen("data.txt","w");
@@ -175,7 +175,7 @@ void save(char var_name[10], char var[10][63], int var_number)
 		fprintf(ofp,"%c %s ",var_name[i], var[i]);
 	fclose(ofp);
 }
-int load(char var_name[10], char var[10][63])
+int load(char var_name[10], char var[10][63])	//load 입력 시 저장된 변수 불러오기
 {
 	int var_number=0;
 	int c;
@@ -374,7 +374,7 @@ void minus(char a[62], char b[62], char result2[63])		// a와 b의 뺄셈 결과
 	}
 	strcpy(result2,result);
 }
-void minus2(char a[100], char b[100], char result2[100])
+void minus2(char a[100], char b[100], char result2[100])	//나누기 처리를 위해 소수점 자릿수를 늘린 -함수
 {
 	if(strcmp(a,b)==0)
 	{
@@ -476,7 +476,7 @@ void minus2(char a[100], char b[100], char result2[100])
 	}
 	strcpy(result2,result);
 }
-void multiple(char a[63], char b[63], char result2[63])
+void multiple(char a[63], char b[63], char result2[63])	//곱셈 함수
 {
 	char a2[63], b2[63];
 	int result[73]={0}, k=0, s;
@@ -539,7 +539,7 @@ void multiple(char a[63], char b[63], char result2[63])
 	}
 	return;
 }
-int divide_func(char a[100], char b[100], int ss, int n)
+int divide_func(char a[100], char b[100], int ss, int n)	//나누기 함수를 사용할때 반복을 줄이기 위해 자릿수를 맞춤
 {
 	if(ss==1)
 		return n;
@@ -625,7 +625,7 @@ int divide_func(char a[100], char b[100], int ss, int n)
 	++n;
 	return n;	
 }
-void divide(char a[100], char b[100], char result[100])
+void divide(char a[100], char b[100], char result[100])	//나누기 함수
 {
 	char a2[100], b2[100], c[100];
 	int s[63]={0},sw=1, k=0,n=0, ss=0;
@@ -755,7 +755,7 @@ void divide(char a[100], char b[100], char result[100])
 			result[i-1]=result[i];
 	}
 }
-void mod(char a[63], char b[63], char result2[63])
+void mod(char a[63], char b[63], char result2[63])	//%함수
 {
 	char result[63];
 	while(1)
@@ -807,7 +807,7 @@ int main()
 				printf("%c %s\n",var_name[i], var[i]);
 			}
 		}
-		else if(input[1]=='=')
+		else if(input[1]=='=')	//=입력시 변수 저장
 		{
 			for(int i=0; i<var_number; ++i)
 			{
@@ -835,7 +835,7 @@ int main()
 		}
 		else if(input[0]>='a' && input[0]<='z' && input[1]=='\0' || input[0]>='A' && input[0]<='Z' && input[1]=='\0')
 		{
-			for(int i=0; i<var_number; ++i)
+			for(int i=0; i<var_number; ++i)	
 			{
 				if(input[0]==var_name[i] || input[0]+32==var_name[i] || input[0]-32==var_name[i])
 				{
@@ -844,14 +844,14 @@ int main()
 					break;
 				}
 			}
-			if(sw==0)
+			if(sw==0)	//변수가 선언되지 않았으면 undefined 출력
 			{
 				printf("\t  = undefined\n");
 			}
 		}
 		else
 		{
-			for(int i=0; i<= 100; ++i)
+			for(int i=0; i<= 100; ++i)	//반복시마다 number배열 초기화
 			{
 				memset(number[i], '\0', 63*sizeof(char));
 				plus_minus[i]=0;
@@ -895,7 +895,7 @@ int main()
 			{	
 				if(number[i][0]=='-')
 				{
-					plus_minus[i]=1;	//plus_minus: 1(?뚯닔), 0(?묒닔)
+					plus_minus[i]=1;	//plus_minus: 1(음수), 0(양수)
 					for(int j=1; j<=strlen(number[i]); ++j)
 						number[i][j-1]=number[i][j];
 				}
@@ -1064,7 +1064,7 @@ int main()
 							}
 							break;
 						}
-						else if(plus_minus[i]==1 && plus_minus[i+1]==1)		//?뚯닔-?뚯닔
+						else if(plus_minus[i]==1 && plus_minus[i+1]==1)		//음수-음수
 						{
 							minus(number[i], number[i+1], result);
 							strcpy(number[i],result);
@@ -1084,7 +1084,7 @@ int main()
 							else
 								plus_minus[i]=1;
 						}
-						else if(plus_minus[i]==0 && plus_minus[i+1]==0)		//?묒닔-?묒닔
+						else if(plus_minus[i]==0 && plus_minus[i+1]==0)		//양수-양수
 						{
 							minus(number[i], number[i+1], result);
 							strcpy(number[i],result);
