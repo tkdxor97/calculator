@@ -151,19 +151,19 @@ void comma(char result[63])
 	l = strlen(result);
 	for(int i = 0; i < l; ++i)
 	{
-		if(result[i] == '.')
+		if(result[i] == '.') // 소수점 찾을 때까지 반복문 돌림
 			k= i - 1;
 	}
 	for(int i = 0; i <= k; ++i)
 	{
 		printf("%c", result[i]);
-		if((i + 1) % 3 ==(k + 1) % 3 && i !=k)
+		if((i + 1) % 3 ==(k + 1) % 3 && i !=k) // 3개마다 콤마 찍기
 			printf(",");
 	}
-	for(int i = k + 1; i < l; ++i)
+	for(int i = k + 1; i < l; ++i) // 소수점 뒤부터 끝까지 반복문
 	{
-		printf("%c", result[i]);
-		if((i - k) != 1 && ((i - k) % 3 == 1) && i != l-1)
+		printf("%c", result[i]); 
+		if((i - k) != 1 && ((i - k) % 3 == 1) && i != l-1) // 소수점 뒤부터 3개마다 콤마 찍기
 			printf(",");
 	}
 }
