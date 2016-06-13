@@ -196,7 +196,6 @@ void plus(char a[62], char b[62], char result[63])
 	char c[62]={};
 	char e[62]={};
 	char f[62]={};
-	int k=0;
 
 	array(a, e);
 	array(b, f);
@@ -225,23 +224,51 @@ void plus(char a[62], char b[62], char result[63])
 			c[i-1]++;
 		}
 		c[i] += '0';
-		if ((e[i]=='.'||f[i]=='.'))
-			c[50] = '.';
 	}
 	for (int i = 0; i <= 63; i++)
 		result[i] = c[i];
-	while (result[1]=='0')
-		for(int i=2; i<strlen(result); ++i)
-			result[i-1]=result[i];
-	if (result[0]=='0' && result[1]!='.')
-		for (int i=1; i< strlen(result);++i)
-			result[i-1]=result[i];
-	for(int i=strlen(result)-1;i>0;--i)
+	result[50] = '.';
+
+	if (e[50]!='.'||f[50]!='.')
 	{
-		if(result[i]=='0' && i>k)
-			result[i]='\0';
-		else
-			break;
+		while (result[1]=='0')
+			for(int i=2; i<strlen(result); ++i)
+				result[i-1]=result[i];
+		if (result[0]=='0')
+			for (int i=1; i< strlen(result);++i)
+				result[i-1]=result[i];
+		for(int i=strlen(result)-1;i>0;--i)
+		{
+			if(result[i]=='0')
+			{
+				result[i]='\0';
+			}
+			else 
+				break;
+		}
+		for (int i = strlen(result); i>0;--i)
+		{
+			if (result[i]=='.')
+				result[i]='\0';
+		}
+	}
+	else
+	{
+		while (result[1]=='0')
+			for(int i=2; i<strlen(result); ++i)
+				result[i-1]=result[i];
+		if (result[0]=='0')
+			for (int i=1; i< strlen(result);++i)
+				result[i-1]=result[i];
+		for(int i=strlen(result)-1;i>0;--i)
+		{
+			if(result[i]=='0')
+			{
+				result[i]='\0';
+			}
+			else 
+				break;
+		}
 	}
 	return ;
 }
