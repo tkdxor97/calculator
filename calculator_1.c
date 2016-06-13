@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void Input(char a[1000])	//식 입력
+int n=1;
+void Input(char a[1000])
 {
 	char aa[1000],c;
 	int i=0;
@@ -18,42 +19,53 @@ void Input(char a[1000])	//식 입력
 	a[i]='\0';
 	return;
 }
-char cut(char a[100][62], char b[100], char input[1000])	//숫자와 연산자 분리
+void cut(char a[100][63], char b[100], char input[1000])
 {
-	int k=0, j=0, n=1;
+	int k=0, j=0;
 	for(int i=1; i<strlen(input); ++i)
 	{
-		if(input[i]=='+' || input[i]=='-' || input[i]=='/' || input[i]=='*' || input[i]=='%')
+		if(input[i]=='+' || input[i]=='-' || input[i]=='*' || input[i]=='/' || input[i]=='%')
 		{
-			k=i;
-			b[0]=input[i];
-			break;
+			if(input[i-1]>='0' && input[i-1]<='9' || input[i-1]>='a' && input[i-1]<='z' || input[i-1]>='A' && input[i-1]<='Z')
+			{
+				k=i;
+				b[0]=input[i];
+				break;
+			}
 		}
 	}
 	for(int i=0; i<k; ++i)
 		a[0][i]=input[i];
-
-	for(int i=k+1, l=k; i<strlen(input);++i)
+	a[0][k]='\0';
+	for(int i=k+1; i<strlen(input);++i)
 	{
-		if(input[i]=='+' || input[i]=='-' || input[i]=='/' || input[i]=='*' || input[i]=='%')
+		if(input[i]=='+' || input[i]=='-' || input[i]=='*' || input[i]=='/' || input[i]=='%')
 		{
-			b[n-1]=input[i];
-			for(int j=l+1; j<i; ++j)
-				a[n][j-l-1]=input[j];
-			++n;
-			l=k;
-			k=i;
+			if(input[i-1]>='0' && input[i-1]<='9' || input[i-1]>='a' && input[i-1]<='z' || input[i-1]>='A' && input[i-1]<='Z')
+			{
+				b[n]=input[i];
+				for(int j=k+1; j<i; ++j)
+					a[n][j-k-1]=input[j];
+				a[n][i-k-1]='\0';
+				++n;
+				k=i;
+			}
 		}
 	}
-	for(int i=k+1; strlen(input); ++i)
-	{
+	for(int i=k+1; i<strlen(input); ++i)
 		a[n][i-k-1]=input[i];
+	a[n][strlen(input)]='\0';
+	for(int i=0; i<=n; ++i)
+	{
+		for(int j=strlen(a[i]); j<=60; ++j)
+		{
+			a[i][j]='\0';
+		}
 	}
-	++n;
-	return n;
 }
-void array(char a[63], char b[63])		//a : 원래 숫자, b : 재배열한 숫자
+void array(char a[63], char b[63])
 {
+	strcpy(b,"");
 	int i, j, n=1, s=0;
 	for(i=0; i<strlen(a); ++i)
 	{
@@ -133,15 +145,61 @@ void array2(char a[100], char b[100])
 	}
 	return;
 }
+void comma(char result[63])
+{
+	int i = 0, l, k;
+	l = strlen(result);
+	for(int i = 0; i < l; ++i)
+	{
+		if(result[i] == '.')
+			k= i - 1;
+	}
+	for(int i = 0; i <= k; ++i)
+	{
+		printf("%c", result[i]);
+		if((i + 1) % 3 ==(k + 1) % 3 && i !=k)
+			printf(",");
+	}
+	for(int i = k + 1; i < l; ++i)
+	{
+		printf("%c", result[i]);
+		if((i - k) != 1 && ((i - k) % 3 == 1) && i != l-1)
+			printf(",");
+	}
+}
+void save(char var_name[10], char var[10][63], int var_number)
+{
+	FILE *ofp;
+	ofp=fopen("data.txt","w");
+	for(int i=0; i<var_number; ++i)
+		fprintf(ofp,"%c %s ",var_name[i], var[i]);
+	fclose(ofp);
+}
+int load(char var_name[10], char var[10][63])
+{
+	int var_number=0;
+	int c;
+	FILE *ifp;
+	ifp=fopen("data.txt","r");
+	while(c!=EOF)
+	{
+		fscanf(ifp,"%c %s",&var_name[var_number], &var[var_number]);
+		c=getc(ifp);
+		++var_number;
+	}
+	fclose(ifp);
+	--var_number;
+	return var_number;
+}
 void plus(char a[62], char b[62], char result[63])
 {
 	char c[62]={};
 	char e[62]={};
 	char f[62]={};
+	int k=0;
 
 	array(a, e);
 	array(b, f);
-	printf("\n%s\n%s",e,f);
 
 	for (int i = 60; i >= 0; i--)
 	{
@@ -175,12 +233,12 @@ void plus(char a[62], char b[62], char result[63])
 	while (result[1]=='0')
 		for(int i=2; i<strlen(result); ++i)
 			result[i-1]=result[i];
-	if (result[0]=='0')
+	if (result[0]=='0' && result[1]!='.')
 		for (int i=1; i< strlen(result);++i)
 			result[i-1]=result[i];
 	for(int i=strlen(result)-1;i>0;--i)
 	{
-		if(result[i]=='0')
+		if(result[i]=='0' && i>k)
 			result[i]='\0';
 		else
 			break;
@@ -195,7 +253,7 @@ void minus(char a[62], char b[62], char result2[63])
 		return;
 	}
 	char a2[63], b2[63], result[63];
-	int i,c[63]={0},sw;		//sw=1 : a-b?옜, sw=0 : a-b?옜
+	int i,c[63]={0},sw;	
 	array(a,a2);
 	array(b,b2);
 	if(strlen(a2)>strlen(b2))
@@ -297,7 +355,7 @@ void minus2(char a[100], char b[100], char result2[100])
 		return;
 	}
 	char a2[100], b2[100], result[100];
-	int i,c[100]={0},sw;		//sw=1 : a-b?옜, sw=0 : a-b?옜
+	int i,c[100]={0},sw;
 	array2(a,a2);
 	array2(b,b2);
 	if(strlen(a2)>strlen(b2))
@@ -613,7 +671,7 @@ void divide(char a[100], char b[100], char result[100])
 				{
 					for(int i=strlen(b); i>1; --i)
 					{
-						
+
 						b[i+1]=b[i];
 					}
 					b[2]=b[0];
@@ -692,90 +750,20 @@ void mod(char a[63], char b[63], char result2[63])
 		}
 	}
 }
-void mod(char a[63], char b[63], char result2[63])
-{
-	char result[63];
-	while(1)
-	{
-		minus(a,b,result);
-		strcpy(a,result);
-		if(a[0]=='-')
-		{
-			for(int i=1; i<=strlen(a); ++i)
-				a[i-1]=a[i];
-			minus(b,a,result);
-			strcpy(result2,result);
-			return;
-		}
-		else if(a[0]=='0')
-		{
-			strcpy(result2,"0");
-			return;
-		}
-	}
-}
-void save(char var_name[10], char var[10][62], int var_number)
-{
-	FILE *ofp;
-	ofp=fopen("data.txt","w");
-	for(int i=0; i<var_number; ++i)
-		fprintf(ofp,"%c %s ",var_name[i], var[i]);
-	fclose(ofp);
-}
-int load(char var_name[10], char var[10][62])
-{
-	int var_number=0;
-	int c;
-	FILE *ifp;
-	ifp=fopen("data.txt","r");
-	while(c!=EOF)
-	{
-		fscanf(ifp,"%c %s",&var_name[var_number], &var[var_number]);
-		c=getc(ifp);
-		++var_number;
-	}
-	fclose(ifp);
-	--var_number;
-	return var_number;
-}
-void change_var(char number[100][62], char var_name[10], char var[10][62])
-{
-	int i, j, k, m, n, v;
-     	char changed_var[10][62]; // 변수에 해당하는 값을 저장할 배열
-     	for(i = 0; i <= 100; ++i)
-        	for(j = 0; j <= 62; ++j)
-         	{
-             		v = number[i][j];
-             		if(((v >= 65)) && (v <=90) || ((v >= 97) && (v <= 122))) // 변수 찾기
-                		for(k = 0; k <= 10; ++k)
-                		{
-                     			if(v == var_name[k]) // 저장된 변수와 일치하는 것이 있는 지 확인
-                     			{
-                        			for(m = 0; m <= 10; ++m)
-                        			{
-                             				for(n = 0; n <= 62; ++n)
-                             				{
-                                 				strcpy(changed_var[m][n], var[k]); // 일치하는 것이 있다면 값을 옮김
-                                				break;
-                             				}
-                             				break;
-                         			}
-                     			}
-                 		}
-         	}
-}
-int main(void)
+int main()
 {
 	char input[1000];
-	char number[100][62], operator[100];
-	char var_name[10], var[10][62];
-	int var_number=0,n,plus_minus[100]={0};	//n : 숫자의 갯수, plus_minus : 양수/음수 구분(양수 : 0, 음수 : 1)
-	char *ptr;
-	int r;
+	char var_name[10], var[10][63], result[63],result2[63];
+	char number[100][63], operator[100];
+	char var_name2[10], var2[10][63];
+	int var_number=0, plus_minus[100]={0},i,j,sw=0, n2=0;
 	printf("Start....\n");
 	while(1)
 	{
-		printf("(input) ");
+		n2=n;
+		n=1;
+		sw=0;
+		printf("(Input) ");
 		Input(input);
 		if(strcmp(input,"clear")==0)
 			system("clear");
@@ -789,64 +777,322 @@ int main(void)
 		{
 			for(int i=0; i < var_number; ++i)
 			{
-				printf("\t  ");
-				printf("%c = %s\n",var_name[i], var[i]);
+				printf("%c %s\n",var_name[i], var[i]);
 			}
-		 } 
+		}
 		else if(input[1]=='=')
 		{
-			ptr=strchr(var_name,input[0]);
-			var_name[var_number]=input[0];
-			if(var_number==10&&ptr==NULL){
-				printf("\t  ");
-				printf("= ERROR\n");
-				continue;}
-			for(int i = 2; i < strlen(input); ++i){
-			if(ptr!=NULL){
-				r=ptr-var_name;
-				var[r][i-2]=input[i];
-			}
-			else
-			{var[var_number][i-2]=input[i];}}
-			printf("\t  ");
-			if(ptr!=NULL)
-			printf("= %s\n",var[r]);
-			else
-			{printf("= %s\n",var[var_number]);
-			++var_number;}
-		
-		}
-			ptr=strchr(var_name,input[0]);
-			for(int i=0;i<var_number;i++){
-			if((input[0]>='a'&&input[0]<='z')||(input[0]>='A'&&input[0]<='Z')){
-			if(input[0]==var_name[i]&&strlen(input)==1){
-			printf("\t  ");
-				printf("= %s\n",var[i]);
-			}}}
-			if((input[0]>='a'&&input[0]<='z')||(input[0]>='A'&&input[0]<='Z')){
-			if(ptr==NULL&&strlen(input)==1){
-			printf("\t  ");
-				printf("= undefined\n");
-				}}
-		else
-		{
-			printf("%s",input);
-			n=cut(number,operator,input);
-			for(int i=0; i<n; ++i)
+			for(int i=0; i<var_number; ++i)
 			{
-				if(number[i][0]=='-')
+				if(input[0]==var_name[i] || input[0]+32==var_name[i] || input[0]-32==var_name[i])
 				{
-					plus_minus[i]=1;
-					for(int j=1; j<strlen(number[i]); ++j)
-						number[i][j-1]=number[i][j];
-					number[i][strlen(number[i])-1]='\0';
+					for(j=0; j<strlen(input); ++j)
+					{
+						var[i][j]=input[j+2];
+					}
+					var[i][j]='\0';
+					sw=1;
+					printf("\t  = %s\n",var[i]);
+					break;
 				}
 			}
-			for(int i=0;i<n;++i)
-				printf("%s\n",number[i]);
-			for(int i=0;i<n-1;++i)
-				printf("%c\n",operator[i]);
+			if(sw==0)
+			{
+				var_name[var_number]=input[0];
+				for(i = 2; i < strlen(input); ++i)
+					var[var_number][i-2]=input[i];
+				var[var_number][i-2]='\0';
+				++var_number;
+				printf("\t  = %s\n",var[var_number-1]);
+			}
 		}
+		else if(input[0]>='a' && input[0]<='z' && input[1]=='\0' || input[0]>='A' && input[0]<='Z' && input[1]=='\0')
+		{
+			for(int i=0; i<var_number; ++i)
+			{
+				if(input[0]==var_name[i] || input[0]+32==var_name[i] || input[0]-32==var_name[i])
+				{
+					sw=1;
+					printf("= %s\n",var[i]);
+					break;
+				}
+			}
+			if(sw==0)
+			{
+				printf("\t  = undefined\n");
+			}
+		}
+		else
+		{
+			for(int i=0; i<= 100; ++i)
+			{
+				memset(number[i], '\0', 63*sizeof(char));
+				plus_minus[i]=0;
+			}
+			for(int i=0; i<=n2-1; ++i)
+				operator[i]=0;
+			for(int i=0; i<var_number; ++i)
+			{
+				var_name2[i]=var_name[i];
+				strcpy(var2[i],var[i]);
+			}
+			cut(number,operator,input);
+			for(int i=0; i<var_number; ++i)
+			{
+				var_name[i]=var_name2[i];
+				strcpy(var[i],var2[i]);
+			}
+			for(int i=0; i<=n; ++i)
+			{
+				sw=0;
+				if(strlen(number[i])==1)
+				{
+					if(number[i][0]>='a' && number[i][0]<='z' || number[i][0]>='A' && number[i][0]<='Z')
+					{
+						for(int j=0; j<var_number; ++j)
+						{
+							if(number[i][0]==var_name[j])
+							{
+								sw=1;
+								strcpy(number[i],var[j]);
+							}
+						}
+						if(sw==0)
+						{
+							printf("\t  =ERROR!!\n");
+						}
+					}
+				}
+			}			
+			for(int i=0; i<=n; ++i)	
+			{	
+				if(number[i][0]=='-')
+				{
+					plus_minus[i]=1;	//plus_minus: 1(?뚯닔), 0(?묒닔)
+					for(int j=1; j<=strlen(number[i]); ++j)
+						number[i][j-1]=number[i][j];
+				}
+			}
+			n2=n;
+			while(1)
+			{
+				sw=0;
+				for(int i=0; i<n; ++i)
+				{
+					if(operator[i]=='*')
+					{
+						--n;
+						sw=1;
+						multiple(number[i],number[i+1],result);
+						strcpy(number[i],result2);
+						if(plus_minus[i]==1 && plus_minus[i+1]==0 || plus_minus[i]==0 && plus_minus[i+1]==1)
+							plus_minus[i]=1;
+						else
+							plus_minus[i]=0;
+						for(int j=i; j<=n-1; ++j)
+						{
+							operator[j]=operator[j+1];
+							strcpy(number[j+1],number[j+2]);
+							plus_minus[j+1]=plus_minus[j+2];
+						}
+						break;
+					}
+					else if(operator[i]=='/')
+					{
+						--n;
+						sw=1;
+						divide(number[i],number[i+1],result);
+						strcpy(number[i],result);
+						if(plus_minus[i]==1 && plus_minus[i+1]==0 || plus_minus[i]==0 && plus_minus[i+1]==1)
+							plus_minus[i]=1;
+						else
+							plus_minus[i]=0;
+						for(int j=i; j<=n-1; ++j)
+						{
+							operator[j]=operator[j+1];
+							strcpy(number[j+1],number[j+2]);
+							plus_minus[j+1]=plus_minus[j+2];
+						}
+						break;
+					}
+					else if(operator[i]=='%')
+					{
+						sw=1;
+						--n;
+						mod(number[i], number[i+1], result);
+						strcpy(number[i],result);
+						if(plus_minus[i]==0 && plus_minus[i]==0)
+							plus_minus[i]=0;
+						for(int j=i; j<=n-1; ++j)
+						{
+							operator[j]=operator[j+1];
+							strcpy(number[j+1],number[j+2]);
+							plus_minus[j+1]=plus_minus[j+2];
+						}
+						break;
+					}
+				}
+				if(sw==0)
+					break;
+			}
+			while(1)
+			{
+				sw=0;
+				for(int i=0; i<n;++i)
+				{
+					if(operator[i]=='+')
+					{
+						sw=1;
+						--n;
+						if(plus_minus[i]==1 && plus_minus[i+1]==0)		//?뚯닔+?묒닔
+						{
+							minus(number[i+1],number[i],result);
+							strcpy(number[i],result);
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1],number[j+2]);
+								plus_minus[j]=plus_minus[j+1];
+							}
+							break;
+							if(number[i][0]=='-')
+							{
+								plus_minus[i]=1;
+								for(int j=1; i<=strlen(number[i]); ++j)
+									number[i][j-1]=number[i][j];
+							}
+						}
+						else if(plus_minus[i]==0 && plus_minus[i+1]==1)		//?묒닔 + ?뚯닔
+						{
+							minus(number[i],number[i+1],result);
+							strcpy(number[i],result);
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j]=plus_minus[j+1];
+							}
+							break;
+							if(number[i][0]=='-')
+							{
+								plus_minus[i]=1;
+								for(int j=1; j<=strlen(number[i]); ++j)
+									number[i][j-1]=number[i][j];
+							}
+						}
+						else if(plus_minus[i]==1 && plus_minus[i+1]==1)		//?뚯닔+ ?뚯닔
+						{
+							plus(number[i],number[i+1],result);
+							strcpy(number[i],result);
+							plus_minus[i]=1;
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j+1]=plus_minus[j+2];
+							}
+							break;
+						}
+						else if(plus_minus[i]==0 && plus_minus[i+1]==0)		//?묒닔 + ?묒닔
+						{
+							plus(number[i],number[i+1],result);
+							strcpy(number[i],result);
+							plus_minus[i]=0;
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j+1]=plus_minus[j+2];
+							}
+							break;
+						}
+					}
+					else if(operator[i]=='-')
+					{
+						sw=1;
+						--n;
+						if(plus_minus[i]==0 && plus_minus[i+1]==1)		//?묒닔-?뚯닔
+						{
+							plus(number[i], number[i+1], result);
+							strcpy(number[i],result);
+							plus_minus[i]=0;
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j+1]=plus_minus[j+2];
+							}
+							break;
+						}
+						else if(plus_minus[i]==1 && plus_minus[i+1]==0)		//?뚯닔-?묒닔
+						{
+							plus(number[i], number[i+1], result);
+							strcpy(number[i], result);
+							plus_minus[i]=1;
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j+1]=plus_minus[j+2];
+							}
+							break;
+						}
+						else if(plus_minus[i]==1 && plus_minus[i+1]==1)		//?뚯닔-?뚯닔
+						{
+							minus(number[i], number[i+1], result);
+							strcpy(number[i],result);
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j+1]=plus_minus[j+2];
+							}
+							break;
+							if(number[i][0]=='-')
+							{
+								plus_minus[i]=0;
+								for(int j=i; j<=strlen(number[i]); ++j)
+									number[i][j-1]=number[i][j];
+							}
+							else
+								plus_minus[i]=1;
+						}
+						else if(plus_minus[i]==0 && plus_minus[i+1]==0)		//?묒닔-?묒닔
+						{
+							minus(number[i], number[i+1], result);
+							strcpy(number[i],result);
+							for(int j=i; j<=n-1; ++j)
+							{
+								operator[j]=operator[j+1];
+								strcpy(number[j+1], number[j+2]);
+								plus_minus[j+1]=plus_minus[j+2];
+							}
+							break;
+							if(number[i][0]=='-')
+							{
+								plus_minus[i]=1;
+								for(int j=i; j<=strlen(number[i]); ++j)
+									number[i][j-1]=number[i][j];
+							}
+							else
+								plus_minus[i]=0;
+						}	
+					}
+				}
+				if(sw==0)
+					break;
+			}
+			printf("\t  =");
+			if(plus_minus[0]==1)
+				printf("-");
+			if(number[0][0]=='-')
+				for(int i=1; i<=strlen(number[0]);++i)
+					number[0][i-1]=number[0][i];
+					
+			comma(number[0]);
+			printf("\n");
+			for(int i=0; i<=n2-1; ++i)
+				operator[i]='\0';
+		}	
 	}
 }
-
