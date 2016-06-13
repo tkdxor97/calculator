@@ -971,7 +971,7 @@ int main()
 					{
 						sw=1;
 						--n;
-						if(plus_minus[i]==1 && plus_minus[i+1]==0)		//?뚯닔+?묒닔
+						if(plus_minus[i]==1 && plus_minus[i+1]==0)		//음수+양수
 						{
 							minus(number[i+1],number[i],result);
 							strcpy(number[i],result);
@@ -989,7 +989,7 @@ int main()
 									number[i][j-1]=number[i][j];
 							}
 						}
-						else if(plus_minus[i]==0 && plus_minus[i+1]==1)		//?묒닔 + ?뚯닔
+						else if(plus_minus[i]==0 && plus_minus[i+1]==1)		//양수+음수
 						{
 							minus(number[i],number[i+1],result);
 							strcpy(number[i],result);
@@ -1007,7 +1007,7 @@ int main()
 									number[i][j-1]=number[i][j];
 							}
 						}
-						else if(plus_minus[i]==1 && plus_minus[i+1]==1)		//?뚯닔+ ?뚯닔
+						else if(plus_minus[i]==1 && plus_minus[i+1]==1)		//음수+음수
 						{
 							plus(number[i],number[i+1],result);
 							strcpy(number[i],result);
@@ -1020,7 +1020,7 @@ int main()
 							}
 							break;
 						}
-						else if(plus_minus[i]==0 && plus_minus[i+1]==0)		//?묒닔 + ?묒닔
+						else if(plus_minus[i]==0 && plus_minus[i+1]==0)		//양수+양수
 						{
 							plus(number[i],number[i+1],result);
 							strcpy(number[i],result);
@@ -1038,7 +1038,7 @@ int main()
 					{
 						sw=1;
 						--n;
-						if(plus_minus[i]==0 && plus_minus[i+1]==1)		//?묒닔-?뚯닔
+						if(plus_minus[i]==0 && plus_minus[i+1]==1)		//양수-음수
 						{
 							plus(number[i], number[i+1], result);
 							strcpy(number[i],result);
@@ -1051,7 +1051,7 @@ int main()
 							}
 							break;
 						}
-						else if(plus_minus[i]==1 && plus_minus[i+1]==0)		//?뚯닔-?묒닔
+						else if(plus_minus[i]==1 && plus_minus[i+1]==0)		//음수-양수
 						{
 							plus(number[i], number[i+1], result);
 							strcpy(number[i], result);
