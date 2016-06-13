@@ -191,13 +191,13 @@ int load(char var_name[10], char var[10][63])
 	--var_number;
 	return var_number;
 }
-void plus(char a[62], char b[62], char result[63])
+void plus(char a[62], char b[62], char result[63])			//a와 b의 덧셈 결과물 result
 {
 	char c[62]={};
 	char e[62]={};
 	char f[62]={};
 
-	array(a, e);
+	array(a, e);							
 	array(b, f);
 
 	for (int i = 60; i >= 0; i--)
@@ -206,9 +206,9 @@ void plus(char a[62], char b[62], char result[63])
 		{
 			c[i] = (e[i]-'0')+(f[i]-'0');
 		}
-		else 
+		else 	
 		{
-			if (f[i]>='0'&&f[i]<='9')
+			if (f[i]>='0'&&f[i]<='9')	
 				c[i] = (f[i]-'0');
 			else if (e[i]>='0'&&e[i]<='9')
 				c[i] = (e[i]-'0');
@@ -218,7 +218,7 @@ void plus(char a[62], char b[62], char result[63])
 	}
 	for (int i = 60; i >= 0; i--)
 	{
-		if (c[i]>9)
+		if (c[i]>9)			//계산후 10자리가 넘어가면 한자리식 넘기기
 		{
 			c[i] -= 10;
 			c[i-1]++;
@@ -229,7 +229,7 @@ void plus(char a[62], char b[62], char result[63])
 		result[i] = c[i];
 	result[50] = '.';
 
-	if (e[50]!='.'||f[50]!='.')
+	if (e[50]!='.'||f[50]!='.')			
 	{
 		while (result[1]=='0')
 			for(int i=2; i<strlen(result); ++i)
@@ -272,7 +272,7 @@ void plus(char a[62], char b[62], char result[63])
 	}
 	return ;
 }
-void minus(char a[62], char b[62], char result2[63])
+void minus(char a[62], char b[62], char result2[63])		// a와 b의 뺄셈 결과물 result
 {
 	if(strcmp(a,b)==0)
 	{
